@@ -78,5 +78,4 @@ const Users = mongoose.model('Users',new mongoose.Schema({
     contacts: [String]
 }, { versionKey: false }));
 
-Users
 export default Users;
