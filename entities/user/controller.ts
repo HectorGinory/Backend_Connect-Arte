@@ -13,7 +13,7 @@ export const userLogIn = async(user) => {
     const findUser = await Users.findOne({email: user.email}).select('+password')
     if(!findUser) throw new Error('NO_USER')
     if(!(await bcrypt.compare(user.password, findUser.password))) throw new Error('WRONG_PASSWORD')
-    const token = jwt.sign({email: user.email, id: findUser._id, name:findUser.name, username:findUser.username}, config.SECRET)
+    const token = jwt.sign({email: user.email, id: findUser._id, name:findUser.name, username:findUser.username, rol: user.rol}, config.SECRET)
     return token
 }
 
@@ -30,6 +30,7 @@ export const editInfoByUserName = async (username, newInfo) => {
     if(newInfo.username !== "") attributesToUpdate.username = newInfo.username
     if(newInfo.description !== "") attributesToUpdate.description = newInfo.description
     if(newInfo.location !== "") attributesToUpdate.location = newInfo.location
+    if(newInfo.rol !== "") attributesToUpdate.rol = newInfo.rol
     const findUser = await Users.findOneAndUpdate({ username: username }, attributesToUpdate, { new: true });
     return findUser
 }
