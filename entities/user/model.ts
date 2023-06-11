@@ -69,6 +69,11 @@ const Users = mongoose.model('Users',new mongoose.Schema({
             description: String
         }
     }],
+    rol: {
+        type: String,
+        default: "user",
+        enum: ["user", "company"]
+    },
     contacts: [String]
 }, { versionKey: false }));
 
