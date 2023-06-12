@@ -17,11 +17,27 @@ const JobVacancies = mongoose.model('JobVacancies',new mongoose.Schema({
         type: String,
         required: true
     },
+    last_day: {
+        type: Date,
+        required: true
+    },
     user_postulated: [String],
     location: {
         type: String,
         required: true
     },
+    question_one: {
+        type: String,
+        default: null
+    },
+    question_two: {
+        type: String,
+        default: null
+    },
+    question_three: {
+        type: String,
+        default: null
+    }
 }, { versionKey: false }));
 
 export default JobVacancies;
