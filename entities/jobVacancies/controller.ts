@@ -35,6 +35,6 @@ export const getVacancies = async(query) => {
 }
 
 export const getVacancieById = async(id) => {
-    const vacancie = await JobVacancies.find({_id: id})
+    const vacancie = await JobVacancies.findOne({_id: id})
     return vacancie
 }
