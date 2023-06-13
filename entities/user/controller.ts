@@ -40,6 +40,7 @@ export const editEducationByUserName = async (username, newInfo:any) => {
     if(!findUser) throw new Error ('NO_USER')
     newInfo.date_start = new Date(newInfo.date_start)
     newInfo.date_end = new Date(newInfo.date_end)
+    newInfo.id = findUser.education.length + 1
     findUser.education.push(newInfo)
     findUser.education.sort((a:any, b:any) => {
         var dateA = new Date(a.date_start);
@@ -54,6 +55,32 @@ export const editEducationByUserName = async (username, newInfo:any) => {
       })
     await findUser.save()
     return findUser
+}
+
+export const deleteEducationByUserName = async (username, removeEducation) => {
+  const findUser: any = await Users.findOne({ username: username });
+  if(!findUser) return
+  findUser.education.forEach(element => {
+    console.log(element)
+  });
+  console.log(removeEducation)
+  const indexRemove = findUser.education.findIndex((education) => education._id.toString() === removeEducation._id)
+  findUser.education.splice(indexRemove, 1)
+  findUser.save()
+  return findUser
+}
+
+export const deleteExperienceByUserName = async (username, removeExperience) => {
+  const findUser: any = await Users.findOne({ username: username });
+  if(!findUser) return
+  findUser.experience.forEach(element => {
+    console.log(element)
+  });
+  console.log(removeExperience)
+  const indexRemove = findUser.experience.findIndex((experience) => experience._id.toString() === removeExperience._id)
+  findUser.experience.splice(indexRemove, 1)
+  findUser.save()
+  return findUser
 }
 
 export const editExperienceByUserName = async (username, newInfo:any) => {

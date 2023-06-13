@@ -50,3 +50,8 @@ export const applyVacancie = async(apply, id) => {
   vacancie?.save()
   return vacancie
 }
+
+export const removeVacancie =async (id) => {
+  const vacancie = await JobVacancies.deleteOne({_id: id});
+  return vacancie
+}
