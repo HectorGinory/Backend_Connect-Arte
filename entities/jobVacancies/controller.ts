@@ -33,3 +33,8 @@ export const getVacancies = async(query) => {
 
         return data
 }
+
+export const getVacancieById = async(id) => {
+    const vacancie = await JobVacancies.find({_id: id})
+    return vacancie
+}
