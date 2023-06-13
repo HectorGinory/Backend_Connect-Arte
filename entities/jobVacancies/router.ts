@@ -1,5 +1,5 @@
 import express from 'express';
-import { applyVacancie, createVacancie, getVacancieById, getVacancies } from './controller.js';
+import { applyVacancie, createVacancie, getVacancieById, getVacancieByUserId, getVacancies } from './controller.js';
 // import { auth } from '../../core/mdw.js';
 
 const router = express.Router();
@@ -25,6 +25,15 @@ router.get('/',async (req, res, next) => {
 router.get('/:id',async (req, res, next) => {
     try {
         const vacancie = await getVacancieById(req.params.id);
+        return res.json(vacancie);
+    } catch (error) {
+        next(error);
+    }
+});
+
+router.get('/user/:id',async (req, res, next) => {
+    try {
+        const vacancie = await getVacancieByUserId(req.params.id);
         return res.json(vacancie);
     } catch (error) {
         next(error);

@@ -69,7 +69,6 @@ const Users = mongoose.model('Users',new mongoose.Schema({
             description: String
         }
     }],
-    jobVacancies: [{}],
     rol: {
         type: String,
         default: "user",

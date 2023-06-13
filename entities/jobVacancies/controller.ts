@@ -39,6 +39,10 @@ export const getVacancieById = async(id) => {
     const vacancie = await JobVacancies.findOne({_id: id})
     return vacancie
 }
+export const getVacancieByUserId = async(id) => {
+  const vacancie = await JobVacancies.find({created_by: id.toString()})
+  return vacancie
+}
 
 export const applyVacancie = async(apply, id) => {
   const vacancie = await getVacancieById(id)
