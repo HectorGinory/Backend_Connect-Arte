@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import config from '../../config.js';
 import bcrypt from 'bcrypt';
 import JobVacancies from './model.js';
+import { app } from '../../app.js';
 
 export const createVacancie = async (newVacancie) => {
         newVacancie.last_day = new Date(newVacancie.last_day)
@@ -37,4 +38,11 @@ export const getVacancies = async(query) => {
 export const getVacancieById = async(id) => {
     const vacancie = await JobVacancies.findOne({_id: id})
     return vacancie
+}
+
+export const applyVacancie = async(apply, id) => {
+  const vacancie = await getVacancieById(id)
+  vacancie?.user_postulated.push(apply)
+  vacancie?.save()
+  return vacancie
 }

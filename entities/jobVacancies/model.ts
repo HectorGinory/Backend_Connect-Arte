@@ -21,7 +21,7 @@ const JobVacancies = mongoose.model('JobVacancies',new mongoose.Schema({
         type: Date,
         required: true
     },
-    user_postulated: [String],
+    user_postulated: [{}],
     location: {
         type: String,
         required: true
