@@ -13,7 +13,7 @@ export const userLogIn = async(user) => {
     const findUser = await Users.findOne({email: user.email}).select('+password')
     if(!findUser) throw new Error('NO_USER')
     if(!(await bcrypt.compare(user.password, findUser.password))) throw new Error('WRONG_PASSWORD')
-    const token = jwt.sign({email: user.email, id: findUser._id, name:findUser.name, username:findUser.username, rol: findUser.rol}, config.SECRET)
+    const token = jwt.sign({email: user.email, id: findUser._id, name:findUser.name,interests: findUser.interests , username:findUser.username, rol: findUser.rol}, config.SECRET)
     return token
 }
 
