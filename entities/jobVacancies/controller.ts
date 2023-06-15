@@ -23,7 +23,7 @@ export const getVacancies = async(query) => {
               { location: { $regex: query.criteria, $options: 'i' } }
             ]
           }
-        const vacanciesList = await JobVacancies.find(filter).skip(startIndex).limit(query.pageSize)
+        const vacanciesList = await JobVacancies.find(filter).skip(startIndex).limit(query.pageSize).populate('created_by')
         const totalCount = await JobVacancies.countDocuments(filter)
         const totalPages = Math.ceil(totalCount/query.pageSize)
         const data = {

@@ -3,7 +3,8 @@ import mongoose from "mongoose";
 const JobVacancies = mongoose.model('JobVacancies',new mongoose.Schema({
     created_by: {
         type: String,
-        required: true
+        required: true,
+        ref: "Users"
     },
     charge_name: {
         type: String,
