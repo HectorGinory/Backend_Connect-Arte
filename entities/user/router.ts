@@ -1,5 +1,5 @@
 import express from 'express';
-import { createUser, getUserByUsername, userLogIn, editInfoByUserName, editEducationByUserName, editExperienceByUserName, deleteEducationByUserName, deleteExperienceByUserName } from './controller.js';
+import { createUser, getUserByUsername, userLogIn, editInfoByUserName, editEducationByUserName, editExperienceByUserName, deleteEducationByUserName, deleteExperienceByUserName, bringUsersByInterests } from './controller.js';
 // import { auth } from '../../core/mdw.js';
 
 const router = express.Router();
@@ -22,6 +22,15 @@ router.post('/login',async (req, res, next) => {
         next(e);
     }
 });
+
+router.get('/byKeyWords', async (req, res, next) => {
+    try {
+        const users = await bringUsersByInterests(req.query.criteria);
+        return res.json({users});
+    } catch (e) {
+        next(e);
+    }
+})
 
 router.get('/:username',async (req, res, next) => {
     try {

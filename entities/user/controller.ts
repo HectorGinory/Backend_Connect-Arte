@@ -105,3 +105,14 @@ export const editExperienceByUserName = async (username, newInfo:any) => {
     await findUser.save()
     return findUser
 }
+
+export const bringUsersByInterests = async(regExp) => {
+  const users = await Users.find({
+    keyWords: {
+      $elemMatch: {
+        $regex: regExp
+      }
+    }
+  });
+  return users
+}

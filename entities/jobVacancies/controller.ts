@@ -36,7 +36,7 @@ export const getVacancies = async(query) => {
 }
 
 export const getVacancieById = async(id) => {
-    const vacancie = await JobVacancies.findOne({_id: id})
+    const vacancie = await JobVacancies.findOne({_id: id}).populate('created_by')
     return vacancie
 }
 export const getVacancieByUserId = async(id) => {
