@@ -49,6 +49,8 @@ const Users = mongoose.model('Users',new mongoose.Schema({
         type: String,
         default: ""
     },
+    interests:[String],
+    keyWords:[String],
     education: [{
      type: {
         date_start: Date,
