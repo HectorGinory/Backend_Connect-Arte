@@ -4,14 +4,24 @@ import config from '../../config.js';
 import bcrypt from 'bcrypt';
 import { create } from 'domain';
 
+const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{6,}$/;
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 const createToken = (user) => {
   const token = jwt.sign({email: user.email, id: user._id, name:user.name,interests: user.interests , username:user.username, rol: user.rol}, config.SECRET)
   return token
 }
 export const createUser = async(newUser) => {
+  const { email, password, name, username } = newUser;
+  if (email === "" || password === "" || name === "" || username === "") throw new Error("INFO_LEFT")
+  if (!emailRegex.test(email)) throw new Error("WRONG_EMAIL_FORMAT")
+  if (!passwordRegex.test(password)) throw new Error("WRONG_PASSWORD_FORMAT")
+  if (name.length > 20) throw new Error("WRONG_NAME_FORMAT")
+  if (username.split(" ").length > 1) throw new Error("WRONG_USERNAME_FORMAT")
     newUser.password = await bcrypt.hash(newUser.password,1);
     const user =  new Users(newUser);
-    return await user.save();
+    await user.save()
+    return createToken(user);
 };
 
 export const userLogIn = async(user) => {

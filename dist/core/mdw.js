@@ -11,7 +11,6 @@ export const auth = (req, res, next) => {
         next();
     }
     catch (e) {
-        console.log('ERROR: AUTH');
         return res.status(401).json({ message: "NO_AUTH" });
     }
 };
@@ -20,7 +19,6 @@ export const sameUser = (req, res, next) => {
     req.token = jwt.decode(token, config.SECRET);
     console.log(req.token, req.params.username);
     if (req.token.username !== req.params.username) {
-        console.log('ERROR: SAMEUSER');
         return res.status(401).json({ message: "NO_AUTH" });
     }
     next();

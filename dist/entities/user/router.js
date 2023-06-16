@@ -1,12 +1,13 @@
 import express from 'express';
 import { createUser, getUserByUsername, userLogIn, editInfoByUserName, editEducationByUserName, editExperienceByUserName, deleteEducationByUserName, deleteExperienceByUserName, bringUsersByInterests, bringUsersByRegExp } from './controller.js';
 import { auth, sameUser } from '../../core/mdw.js';
-// import { auth } from '../../core/mdw.js';
 const router = express.Router();
 router.post('/', async (req, res, next) => {
     try {
-        const newUser = await createUser(req.body);
-        return res.json(newUser);
+        const token = await createUser(req.body);
+        if (!token)
+            return next(new Error('NO_TOKEN'));
+        return res.json({ token: token });
     }
     catch (error) {
         next(error);
@@ -17,13 +18,13 @@ router.post('/login', async (req, res, next) => {
         const token = await userLogIn(req.body);
         if (!token)
             return next(new Error('NO_TOKEN'));
-        return res.json({ token });
+        return res.json({ token: token });
     }
     catch (e) {
         next(e);
     }
 });
-router.get('/byKeyWords', async (req, res, next) => {
+router.get('/byKeyWords', auth, async (req, res, next) => {
     try {
         const users = await bringUsersByInterests(req.query.criteria);
         return res.json({ users });
@@ -92,7 +93,7 @@ router.put('/experience/:username', async (req, res, next) => {
         next(e);
     }
 });
-router.get('/:username', async (req, res, next) => {
+router.get('/:username', auth, async (req, res, next) => {
     try {
         const user = await getUserByUsername(req.params.username);
         return res.json({ user });
