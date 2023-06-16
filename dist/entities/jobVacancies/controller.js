@@ -1,7 +1,9 @@
-import JobVacancies from './model.js';
+import JobVacancies from "./model.js";
 export const createVacancie = async (newVacancie) => {
     newVacancie.last_day = new Date(newVacancie.last_day);
     const vacancie = new JobVacancies(newVacancie);
+    if (!vacancie)
+        throw new Error("NO_VACANCIE");
     return await vacancie.save();
 };
 export const getVacancies = async (query) => {
@@ -10,24 +12,29 @@ export const getVacancies = async (query) => {
     const filter = {
         last_day: { $gt: actualDate },
         $or: [
-            { charge_name: { $regex: query.criteria, $options: 'i' } },
-            { description: { $regex: query.criteria, $options: 'i' } },
-            { sector: { $regex: query.criteria, $options: 'i' } },
-            { location: { $regex: query.criteria, $options: 'i' } }
-        ]
+            { charge_name: { $regex: query.criteria, $options: "i" } },
+            { description: { $regex: query.criteria, $options: "i" } },
+            { sector: { $regex: query.criteria, $options: "i" } },
+            { location: { $regex: query.criteria, $options: "i" } },
+        ],
     };
-    const vacanciesList = await JobVacancies.find(filter).skip(startIndex).limit(query.pageSize).populate('created_by');
+    const vacanciesList = await JobVacancies.find(filter)
+        .skip(startIndex)
+        .limit(query.pageSize)
+        .populate("created_by");
     const totalCount = await JobVacancies.countDocuments(filter);
     const totalPages = Math.ceil(totalCount / query.pageSize);
     const data = {
-        "currentPage": query.pageNumber,
-        "totalPages": totalPages,
-        "data": vacanciesList,
+        currentPage: query.pageNumber,
+        totalPages: totalPages,
+        data: vacanciesList,
     };
     return data;
 };
 export const getVacancieById = async (id) => {
-    const vacancie = await JobVacancies.findOne({ _id: id }).populate('created_by');
+    const vacancie = await JobVacancies.findOne({ _id: id }).populate("created_by");
+    if (!vacancie)
+        throw new Error("NO_VACANCIE");
     return vacancie;
 };
 export const getVacancieByUserId = async (id) => {
