@@ -8,11 +8,9 @@ export const auth = (req, res, next) => {
   }
   const token = req.headers.authorization.split(" ")[1];
   try {
-    console.log(req.headers.authorization);
     req.token = jwt.verify(token, config.SECRET);
     next();
   } catch (e) {
-    console.log("ERROR:", e);
     return res.status(401).json({ message: "NO_AUTH" });
   }
 };
