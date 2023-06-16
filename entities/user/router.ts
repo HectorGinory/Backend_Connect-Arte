@@ -1,5 +1,5 @@
 import express from 'express';
-import { createUser, getUserByUsername, userLogIn, editInfoByUserName, editEducationByUserName, editExperienceByUserName, deleteEducationByUserName, deleteExperienceByUserName, bringUsersByInterests } from './controller.js';
+import { createUser, getUserByUsername, userLogIn, editInfoByUserName, editEducationByUserName, editExperienceByUserName, deleteEducationByUserName, deleteExperienceByUserName, bringUsersByInterests, bringUsersByRegExp } from './controller.js';
 // import { auth } from '../../core/mdw.js';
 
 const router = express.Router();
@@ -32,15 +32,14 @@ router.get('/byKeyWords', async (req, res, next) => {
     }
 })
 
-router.get('/:username',async (req, res, next) => {
+router.get('/regExp/:regExpUsername',async (req, res, next) => {
     try {
-        const user = await getUserByUsername(req.params.username);
+        const user = await bringUsersByRegExp(req.params.regExpUsername);
         return res.json({user});
     } catch (e) {
         next(e);
     }
 });
-
 router.put('/info/:username',async (req, res, next) => {
     try {
         const user = await editInfoByUserName(req.params.username, req.body);
@@ -84,6 +83,15 @@ router.put('/experience/:username',async (req, res, next) => {
         return res.json({user});
     } catch (e) {
         console.log(e)
+        next(e);
+    }
+});
+
+router.get('/:username',async (req, res, next) => {
+    try {
+        const user = await getUserByUsername(req.params.username);
+        return res.json({user});
+    } catch (e) {
         next(e);
     }
 });

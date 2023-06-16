@@ -119,6 +119,14 @@ export const bringUsersByInterests = async (regExp) => {
                 $regex: regExp
             }
         }
+    }).limit(10);
+    return users;
+};
+export const bringUsersByRegExp = async (regExp) => {
+    const users = await Users.find({
+        username: {
+            $regex: regExp
+        }
     });
     return users;
 };
