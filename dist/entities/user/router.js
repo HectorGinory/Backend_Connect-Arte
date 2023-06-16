@@ -33,7 +33,7 @@ router.get('/byKeyWords', auth, async (req, res, next) => {
         next(e);
     }
 });
-router.get('/regExp/:regExpUsername', async (req, res, next) => {
+router.get('/regExp/:regExpUsername', auth, async (req, res, next) => {
     try {
         const user = await bringUsersByRegExp(req.params.regExpUsername);
         return res.json({ user });
@@ -53,7 +53,7 @@ router.put('/info/:username', auth, sameUser, async (req, res, next) => {
         next(e);
     }
 });
-router.put('/education/:username', async (req, res, next) => {
+router.put('/education/:username', auth, sameUser, async (req, res, next) => {
     try {
         const user = await editEducationByUserName(req.params.username, req.body);
         return res.json({ user });
@@ -63,7 +63,7 @@ router.put('/education/:username', async (req, res, next) => {
         next(e);
     }
 });
-router.post('/educationDelete/:username', async (req, res, next) => {
+router.post('/educationDelete/:username', auth, sameUser, async (req, res, next) => {
     try {
         const user = await deleteEducationByUserName(req.params.username, req.body);
         return res.json({ user });
@@ -73,7 +73,7 @@ router.post('/educationDelete/:username', async (req, res, next) => {
         next(e);
     }
 });
-router.post('/experienceDelete/:username', async (req, res, next) => {
+router.post('/experienceDelete/:username', auth, sameUser, async (req, res, next) => {
     try {
         const user = await deleteExperienceByUserName(req.params.username, req.body);
         return res.json({ user });
@@ -83,7 +83,7 @@ router.post('/experienceDelete/:username', async (req, res, next) => {
         next(e);
     }
 });
-router.put('/experience/:username', async (req, res, next) => {
+router.put('/experience/:username', auth, sameUser, async (req, res, next) => {
     try {
         const user = await editExperienceByUserName(req.params.username, req.body);
         return res.json({ user });
