@@ -4,7 +4,7 @@ const Users = mongoose.model('Users', new mongoose.Schema({
         type: String,
         required: true,
         min: 3,
-        max: 100
+        max: 20
     },
     email: {
         type: String,
@@ -34,17 +34,10 @@ const Users = mongoose.model('Users', new mongoose.Schema({
     },
     description: {
         type: String,
-        default: ""
+        default: "",
+        max: 150
     },
     location: {
-        type: String,
-        default: ""
-    },
-    habilities: {
-        type: [String],
-        default: []
-    },
-    profesion: {
         type: String,
         default: ""
     },
