@@ -1,8 +1,8 @@
 import express from 'express';
 import { createUser, getUserByUsername, userLogIn, editInfoByUserName, editEducationByUserName, editExperienceByUserName, deleteEducationByUserName, deleteExperienceByUserName, bringUsersByInterests, bringUsersByRegExp } from './controller.js';
-import { auth, sameUser } from '../../core/mdw.js';
+import { auth, checkNoInfoEmpty, sameUser } from '../../core/mdw.js';
 const router = express.Router();
-router.post('/', async (req, res, next) => {
+router.post('/', checkNoInfoEmpty, async (req, res, next) => {
     try {
         const token = await createUser(req.body);
         if (!token)
@@ -53,7 +53,7 @@ router.put('/info/:username', auth, sameUser, async (req, res, next) => {
         next(e);
     }
 });
-router.put('/education/:username', auth, sameUser, async (req, res, next) => {
+router.put('/education/:username', auth, sameUser, checkNoInfoEmpty, async (req, res, next) => {
     try {
         const user = await editEducationByUserName(req.params.username, req.body);
         return res.json({ user });
@@ -83,7 +83,7 @@ router.post('/experienceDelete/:username', auth, sameUser, async (req, res, next
         next(e);
     }
 });
-router.put('/experience/:username', auth, sameUser, async (req, res, next) => {
+router.put('/experience/:username', auth, sameUser, checkNoInfoEmpty, async (req, res, next) => {
     try {
         const user = await editExperienceByUserName(req.params.username, req.body);
         return res.json({ user });

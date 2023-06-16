@@ -10,8 +10,6 @@ const createToken = (user) => {
 };
 export const createUser = async (newUser) => {
     const { email, password, name, username } = newUser;
-    if (email === "" || password === "" || name === "" || username === "")
-        throw new Error("INFO_LEFT");
     if (!emailRegex.test(email))
         throw new Error("WRONG_EMAIL_FORMAT");
     if (!passwordRegex.test(password))
@@ -64,62 +62,36 @@ export const editInfoByUserName = async (username, newInfo) => {
         throw new Error("NO_USER_FOUND");
     return createToken(findUser);
 };
-export const editEducationByUserName = async (username, newInfo) => {
-    const findUser = await Users.findOne({ username: username });
-    if (!findUser)
-        throw new Error('NO_USER');
-    newInfo.date_start = new Date(newInfo.date_start);
-    newInfo.date_end = new Date(newInfo.date_end);
-    newInfo.id = findUser.education.length + 1;
-    findUser.education.push(newInfo);
-    findUser.education.sort((a, b) => {
-        var dateA = new Date(a.date_start);
-        var dateB = new Date(b.date_start);
-        if (dateA < dateB) {
-            return -1;
-        }
-        if (dateA > dateB) {
-            return 1;
-        }
-        return 0;
-    });
-    await findUser.save();
-    return findUser;
-};
 export const deleteEducationByUserName = async (username, removeEducation) => {
     const findUser = await Users.findOne({ username: username });
     if (!findUser)
-        return;
-    findUser.education.forEach(element => {
-        console.log(element);
-    });
-    console.log(removeEducation);
-    const indexRemove = findUser.education.findIndex((education) => education._id.toString() === removeEducation._id);
-    findUser.education.splice(indexRemove, 1);
+        throw new Error("NO_USER");
+    return await removeItemFromUserArray(findUser, "education", removeEducation);
+};
+const removeItemFromUserArray = async (findUser, array, removeItem) => {
+    const indexRemove = findUser[array].findIndex((item) => item._id.toString() === removeItem._id);
+    findUser[array].splice(indexRemove, 1);
     findUser.save();
     return findUser;
 };
 export const deleteExperienceByUserName = async (username, removeExperience) => {
     const findUser = await Users.findOne({ username: username });
     if (!findUser)
-        return;
-    findUser.experience.forEach(element => {
-        console.log(element);
-    });
-    console.log(removeExperience);
-    const indexRemove = findUser.experience.findIndex((experience) => experience._id.toString() === removeExperience._id);
-    findUser.experience.splice(indexRemove, 1);
-    findUser.save();
-    return findUser;
+        throw new Error("NO_USER");
+    return await removeItemFromUserArray(findUser, "experience", removeExperience);
 };
-export const editExperienceByUserName = async (username, newInfo) => {
+export const editEducationByUserName = async (username, newInfo) => {
     const findUser = await Users.findOne({ username: username });
     if (!findUser)
         throw new Error('NO_USER');
+    return await insertInArrayOfUser(username, "education", newInfo);
+};
+const insertInArrayOfUser = async (findUser, array, newInfo) => {
     newInfo.date_start = new Date(newInfo.date_start);
     newInfo.date_end = new Date(newInfo.date_end);
-    findUser.experience.push(newInfo);
-    findUser.experience.sort((a, b) => {
+    newInfo.id = findUser[array].length + 1;
+    findUser[array].push(newInfo);
+    findUser[array].sort((a, b) => {
         var dateA = new Date(a.date_start);
         var dateB = new Date(b.date_start);
         if (dateA < dateB) {
@@ -131,7 +103,12 @@ export const editExperienceByUserName = async (username, newInfo) => {
         return 0;
     });
     await findUser.save();
-    return findUser;
+};
+export const editExperienceByUserName = async (username, newInfo) => {
+    const findUser = await Users.findOne({ username: username });
+    if (!findUser)
+        throw new Error('NO_USER');
+    return await insertInArrayOfUser(username, "experience", newInfo);
 };
 export const bringUsersByInterests = async (regExp) => {
     const users = await Users.find({
