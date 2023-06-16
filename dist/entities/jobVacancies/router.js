@@ -34,9 +34,11 @@ router.get("/:id", auth, async (req, res, next) => {
         next(error);
     }
 });
-router.get("/user/:id", async (req, res, next) => {
+router.get("/user/:id", auth, async (req, res, next) => {
     try {
         const vacancie = await getVacancieByUserId(req.params.id);
+        if (!vacancie)
+            throw new Error("NO_VACANCIE");
         return res.json(vacancie);
     }
     catch (error) {
