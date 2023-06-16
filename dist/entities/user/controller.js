@@ -2,6 +2,10 @@ import Users from './model.js';
 import jwt from 'jsonwebtoken';
 import config from '../../config.js';
 import bcrypt from 'bcrypt';
+const createToken = (user) => {
+    const token = jwt.sign({ email: user.email, id: user._id, name: user.name, interests: user.interests, username: user.username, rol: user.rol }, config.SECRET);
+    return token;
+};
 export const createUser = async (newUser) => {
     newUser.password = await bcrypt.hash(newUser.password, 1);
     const user = new Users(newUser);
@@ -13,7 +17,7 @@ export const userLogIn = async (user) => {
         throw new Error('NO_USER');
     if (!(await bcrypt.compare(user.password, findUser.password)))
         throw new Error('WRONG_PASSWORD');
-    const token = jwt.sign({ email: user.email, id: findUser._id, name: findUser.name, interests: findUser.interests, username: findUser.username, rol: findUser.rol }, config.SECRET);
+    const token = createToken(findUser);
     return token;
 };
 export const getUserByUsername = async (username) => {
@@ -24,13 +28,14 @@ export const getUserByUsername = async (username) => {
 };
 export const editInfoByUserName = async (username, newInfo) => {
     const attributesToUpdate = {};
-    if (newInfo.name !== "")
+    if (newInfo.name !== "" && newInfo.name.length <= 20)
         attributesToUpdate.name = newInfo.name;
-    if (newInfo.email !== "")
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (newInfo.email !== "" && !emailRegex.test(newInfo.email))
         attributesToUpdate.email = newInfo.email;
-    if (newInfo.username !== "")
+    if (newInfo.username !== "" && newInfo.username.split(" ").length <= 1)
         attributesToUpdate.username = newInfo.username;
-    if (newInfo.description !== "")
+    if (newInfo.description !== "" && newInfo.description.length <= 150)
         attributesToUpdate.description = newInfo.description;
     if (newInfo.location !== "")
         attributesToUpdate.location = newInfo.location;
@@ -41,7 +46,9 @@ export const editInfoByUserName = async (username, newInfo) => {
     if (newInfo.keyWords !== "")
         attributesToUpdate.keyWords = newInfo.keyWords.split(", ");
     const findUser = await Users.findOneAndUpdate({ username: username }, attributesToUpdate, { new: true });
-    return findUser;
+    if (!findUser)
+        throw new Error("NO_USER_FOUND");
+    return createToken(findUser);
 };
 export const editEducationByUserName = async (username, newInfo) => {
     const findUser = await Users.findOne({ username: username });

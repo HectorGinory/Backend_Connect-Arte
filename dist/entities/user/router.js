@@ -1,5 +1,6 @@
 import express from 'express';
 import { createUser, getUserByUsername, userLogIn, editInfoByUserName, editEducationByUserName, editExperienceByUserName, deleteEducationByUserName, deleteExperienceByUserName, bringUsersByInterests, bringUsersByRegExp } from './controller.js';
+import { auth, sameUser } from '../../core/mdw.js';
 // import { auth } from '../../core/mdw.js';
 const router = express.Router();
 router.post('/', async (req, res, next) => {
@@ -40,10 +41,12 @@ router.get('/regExp/:regExpUsername', async (req, res, next) => {
         next(e);
     }
 });
-router.put('/info/:username', async (req, res, next) => {
+router.put('/info/:username', auth, sameUser, async (req, res, next) => {
     try {
-        const user = await editInfoByUserName(req.params.username, req.body);
-        return res.json({ user });
+        const userToken = await editInfoByUserName(req.params.username, req.body);
+        if (!userToken)
+            throw new Error("ERROR_CREATING_TOKEN");
+        return res.json({ token: userToken });
     }
     catch (e) {
         next(e);
