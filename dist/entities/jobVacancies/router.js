@@ -54,13 +54,14 @@ router.post("/apply/:id", auth, itsUser, async (req, res, next) => {
         next(error);
     }
 });
-router.post("/delete/:id", async (req, res, next) => {
+router.post("/delete/:id", auth, itsCompany, async (req, res, next) => {
     try {
         const vacancie = await removeVacancie(req.params.id);
+        if (!vacancie)
+            throw new Error("NO_VACANCIE");
         return res.json(vacancie);
     }
     catch (error) {
-        console.log(error);
         next(error);
     }
 });

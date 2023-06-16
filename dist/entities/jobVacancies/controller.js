@@ -39,16 +39,22 @@ export const getVacancieById = async (id) => {
 };
 export const getVacancieByUserId = async (id) => {
     const vacancie = await JobVacancies.find({ created_by: id.toString() });
+    if (!vacancie)
+        throw new Error("NO_VACANCIE");
     return vacancie;
 };
 export const applyVacancie = async (apply, id) => {
     const vacancie = await getVacancieById(id);
+    if (!vacancie)
+        throw new Error("NO_VACANCIE");
     vacancie?.user_postulated.push(apply);
     vacancie?.save();
     return vacancie;
 };
 export const removeVacancie = async (id) => {
     const vacancie = await JobVacancies.deleteOne({ _id: id });
+    if (!vacancie)
+        throw new Error("NO_VACANCIE");
     return vacancie;
 };
 //# sourceMappingURL=controller.js.map
