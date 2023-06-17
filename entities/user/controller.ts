@@ -101,13 +101,20 @@ export const editExperienceByUserName = async (username, newInfo:any) => {
 }
 
 export const bringUsersByInterests = async(regExp) => {
-  const users = await Users.find({
-    keyWords: {
-      $elemMatch: {
-        $regex: regExp
+  let filter
+  console.log(regExp)
+  if(!regExp) {
+    filter = {} 
+  } else {
+    filter = {
+      keyWords: {
+        $elemMatch: {
+          $regex: regExp
+        }
       }
     }
-  }).limit(10);
+  }
+  const users = await Users.find(filter).limit(6);
   return users
 }
 
