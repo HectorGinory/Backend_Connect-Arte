@@ -19,7 +19,6 @@ export const seedUsers = async (count) => {
     users.push(newUser);
   }
   return await Users.insertMany(users);
-return ""
 };
 
 const jobs = ["Actor", "Actriz", "Director de cine", "Bailarina profesional", "Cantante"]
