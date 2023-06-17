@@ -32,12 +32,12 @@ export const checkNoInfoEmpty = (req, res, next) => {
 };
 export const itsUser = (req, res, next) => {
     if (req.token.rol !== "user")
-        throw new Error("NOT_A_USER");
+        throw new Error("NO_AUTH");
     next();
 };
 export const itsCompany = (req, res, next) => {
     if (req.token.rol !== "company")
-        throw new Error("NOT_A_COMPANY");
+        throw new Error("NO_AUTH");
     next();
 };
 export const allVacancieInfo = (req, res, next) => {

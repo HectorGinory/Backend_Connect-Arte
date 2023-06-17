@@ -49,7 +49,7 @@ export const editInfoByUserName = async (username, newInfo) => {
     if(newInfo.interests !== "") attributesToUpdate.interests = newInfo.interests.split(", ")
     if(newInfo.keyWords !== "") attributesToUpdate.keyWords = newInfo.keyWords.split(", ")
     const findUser = await Users.findOneAndUpdate({ username: username }, attributesToUpdate, { new: true });
-    if(!findUser) throw new Error("NO_USER_FOUND")
+    if(!findUser) throw new Error("NO_USER")
     return createToken(findUser)
 }
 

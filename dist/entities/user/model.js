@@ -41,6 +41,14 @@ const Users = mongoose.model('Users', new mongoose.Schema({
         type: String,
         default: ""
     },
+    followers: [{
+            type: String,
+            ref: "Users"
+        }],
+    following: [{
+            type: String,
+            ref: "Users"
+        }],
     interests: [String],
     keyWords: [String],
     education: [{

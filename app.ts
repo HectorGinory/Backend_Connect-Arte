@@ -16,12 +16,22 @@ mongoose.connect(config.DDBB!).then(()=>{
 const handlerError = (err:Error,req,res,next)=>{
   console.log(err)
     if(err.message === 'NO_TOKEN'){
-      return res.status(404).json({code:err.message,message:"Debes tener ña sesión iniciada"});
+      return res.status(400).json({code:err.message,message:"Debes tener ña sesión iniciada"});
     }
-    if(err.message === 'NO_TOKEN'){
-      return res.status(404).json({code:err.message,message:"Debes tener ña sesión iniciada"});
+    if(err.message === 'NO_AUTH'){
+      return res.status(401).json({code:err.message,message:"No tienes autorización para hacer esto"});
     }
-    return res.status(500).json({code:'SERVER_ERROR', message: err.message});    
+    if(err.message === 'INFO_LEFT'){
+      return res.status(400).json({code:err.message,message:"Falta información por rellenar"});
+    }
+    if(err.message === 'NO_VACANCIE'){
+      return res.status(404).json({code:err.message,message:"No se ha encontrado esa oferta"});
+    }
+    if(err.message === 'NO_USER'){
+      return res.status(404).json({code:err.message,message:"No se ha encontrado ese usuario"});
+    }
+    
+    return res.status(500).json({code:'SERVER_ERROR', message: "Error de servidor"});    
 };
 
 let corsOptions = {
