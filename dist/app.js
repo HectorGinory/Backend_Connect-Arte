@@ -4,18 +4,19 @@ import routerUser from "./entities/user/router.js";
 import routerVacancies from "./entities/jobVacancies/router.js";
 import config from "./config.js";
 import cors from "cors";
+import { seedUsers, seedVacancies } from "./core/seeder.js";
 export const app = express();
 mongoose
     .connect(config.DDBB)
     .then(() => {
     console.log("Connected to the database");
-    // seedUsers(10).then(() => {
-    //   seedVacancies(10).then(() => {
-    //     console.log("Datos enviados");
-    //   });
-    // }).catch(e => {
-    //   console.log(e)
-    // });
+    seedUsers(0).then(() => {
+        seedVacancies(100).then(() => {
+            console.log("Datos enviados");
+        });
+    }).catch(e => {
+        console.log(e);
+    });
 })
     .catch((e) => {
     console.log("ERROR:", e);

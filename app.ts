@@ -13,13 +13,13 @@ mongoose
   .then(() => {
     console.log("Connected to the database");
 
-    // seedUsers(10).then(() => {
-    //   seedVacancies(10).then(() => {
-    //     console.log("Datos enviados");
-    //   });
-    // }).catch(e => {
-    //   console.log(e)
-    // });
+    seedUsers(0).then(() => {
+      seedVacancies(100).then(() => {
+        console.log("Datos enviados");
+      });
+    }).catch(e => {
+      console.log(e)
+    });
   }
   )
   .catch((e) => {
