@@ -25,7 +25,7 @@ export const seedVacancies = async (count) => {
     const users = await Users.find({});
     for (let i = 0; i < count; i++) {
         const newVacancie = new JobVacancies({
-            created_by: users[Math.round(Math.random() * (users.length - 1))]._id,
+            created_by: users[Math.round(Math.random() * (users.length - 1))]._id.toString(),
             charge_name: jobs[Math.round(Math.random() * (jobs.length - 1))],
             description: faker.lorem.lines(),
             sector: sector[Math.round(Math.random() * (sector.length - 1))],

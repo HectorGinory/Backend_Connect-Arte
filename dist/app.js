@@ -11,7 +11,7 @@ mongoose
     .then(() => {
     console.log("Connected to the database");
     seedUsers(0).then(() => {
-        seedVacancies(100).then(() => {
+        seedVacancies(0).then(() => {
             console.log("Datos enviados");
         });
     }).catch(e => {
