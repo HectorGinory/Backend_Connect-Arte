@@ -12,6 +12,12 @@ mongoose.connect(config.DDBB).then(() => {
 });
 const handlerError = (err, req, res, next) => {
     console.log(err);
+    if (err.message === 'NO_TOKEN') {
+        return res.status(404).json({ code: err.message, message: "Debes tener ña sesión iniciada" });
+    }
+    if (err.message === 'NO_TOKEN') {
+        return res.status(404).json({ code: err.message, message: "Debes tener ña sesión iniciada" });
+    }
     return res.status(500).json({ code: 'SERVER_ERROR', message: err.message });
 };
 let corsOptions = {

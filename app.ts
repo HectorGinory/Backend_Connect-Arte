@@ -15,7 +15,13 @@ mongoose.connect(config.DDBB!).then(()=>{
 
 const handlerError = (err:Error,req,res,next)=>{
   console.log(err)
-  return res.status(500).json({code:'SERVER_ERROR', message: err.message});
+    if(err.message === 'NO_TOKEN'){
+      return res.status(404).json({code:err.message,message:"Debes tener ña sesión iniciada"});
+    }
+    if(err.message === 'NO_TOKEN'){
+      return res.status(404).json({code:err.message,message:"Debes tener ña sesión iniciada"});
+    }
+    return res.status(500).json({code:'SERVER_ERROR', message: err.message});    
 };
 
 let corsOptions = {
@@ -29,6 +35,5 @@ app.use(express.json());
 app.use(cors(corsOptions));
 app.use('/user', routerUser)
 app.use('/vacancies', routerVacancies)
-
 app.use(handlerError);
 app.listen(config.PORT, () => console.log(`Server up in port ${config.PORT}`));

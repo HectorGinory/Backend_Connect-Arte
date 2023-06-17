@@ -84,12 +84,11 @@ export const editEducationByUserName = async (username, newInfo) => {
     const findUser = await Users.findOne({ username: username });
     if (!findUser)
         throw new Error('NO_USER');
-    return await insertInArrayOfUser(username, "education", newInfo);
+    return await insertInArrayOfUser(findUser, "education", newInfo);
 };
 const insertInArrayOfUser = async (findUser, array, newInfo) => {
     newInfo.date_start = new Date(newInfo.date_start);
     newInfo.date_end = new Date(newInfo.date_end);
-    newInfo.id = findUser[array].length + 1;
     findUser[array].push(newInfo);
     findUser[array].sort((a, b) => {
         var dateA = new Date(a.date_start);
@@ -108,7 +107,7 @@ export const editExperienceByUserName = async (username, newInfo) => {
     const findUser = await Users.findOne({ username: username });
     if (!findUser)
         throw new Error('NO_USER');
-    return await insertInArrayOfUser(username, "experience", newInfo);
+    return await insertInArrayOfUser(findUser, "experience", newInfo);
 };
 export const bringUsersByInterests = async (regExp) => {
     const users = await Users.find({

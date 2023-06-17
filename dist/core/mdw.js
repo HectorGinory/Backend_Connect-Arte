@@ -16,7 +16,6 @@ export const auth = (req, res, next) => {
 export const sameUser = (req, res, next) => {
     const token = req.headers.authorization.split(" ")[1];
     req.token = jwt.decode(token, config.SECRET);
-    console.log(req.token, req.params.username);
     if (req.token.username !== req.params.username) {
         return res.status(401).json({ message: "NO_AUTH" });
     }
