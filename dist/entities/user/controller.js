@@ -5,7 +5,7 @@ import bcrypt from 'bcrypt';
 const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{6,}$/;
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const createToken = (user) => {
-    const token = jwt.sign({ email: user.email, id: user._id, name: user.name, interests: user.interests, username: user.username, rol: user.rol }, config.SECRET);
+    const token = jwt.sign({ email: user.email, id: user._id, name: user.name, interests: user.interests, username: user.username, rol: user.rol, following: user.following }, config.SECRET);
     return token;
 };
 export const createUser = async (newUser) => {
@@ -126,5 +126,32 @@ export const bringUsersByRegExp = async (regExp) => {
         }
     });
     return users;
+};
+export const followUser = async (userFollowing, userFollow) => {
+    const followUser = await Users.findOne({ username: userFollow });
+    if (!followUser)
+        throw new Error('NO_USER');
+    const user = await Users.findOne({ username: userFollowing.username });
+    if (!user)
+        throw new Error('NO_USER');
+    followUser.followers?.push(user._id);
+    user.following?.push(followUser._id);
+    await followUser.save();
+    await user.save();
+    return createToken(user);
+};
+export const unfollowUser = async (userFollowing, userFollow) => {
+    const followUser = await Users.findOne({ username: userFollow });
+    if (!followUser)
+        throw new Error('NO_USER');
+    const user = await Users.findOne({ username: userFollowing.username });
+    if (!user)
+        throw new Error('NO_USER');
+    followUser.followers.splice(followUser.followers.indexOf(user._id), 1);
+    user.following.splice(user.following.indexOf(followUser._id), 1);
+    console.log();
+    await followUser.save();
+    await user.save();
+    return createToken(user);
 };
 //# sourceMappingURL=controller.js.map

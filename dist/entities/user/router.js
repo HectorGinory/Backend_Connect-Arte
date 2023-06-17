@@ -1,5 +1,5 @@
 import express from 'express';
-import { createUser, getUserByUsername, userLogIn, editInfoByUserName, editEducationByUserName, editExperienceByUserName, deleteEducationByUserName, deleteExperienceByUserName, bringUsersByInterests, bringUsersByRegExp } from './controller.js';
+import { createUser, getUserByUsername, userLogIn, editInfoByUserName, editEducationByUserName, editExperienceByUserName, deleteEducationByUserName, deleteExperienceByUserName, bringUsersByInterests, bringUsersByRegExp, followUser, unfollowUser } from './controller.js';
 import { auth, checkNoInfoEmpty, sameUser } from '../../core/mdw.js';
 const router = express.Router();
 router.post('/', checkNoInfoEmpty, async (req, res, next) => {
@@ -28,6 +28,24 @@ router.get('/byKeyWords', auth, async (req, res, next) => {
     try {
         const users = await bringUsersByInterests(req.query.criteria);
         return res.json({ users });
+    }
+    catch (e) {
+        next(e);
+    }
+});
+router.post(`/follow/:username`, auth, async (req, res, next) => {
+    try {
+        const token = await followUser(req.token, req.params.username);
+        return res.json({ token: token });
+    }
+    catch (e) {
+        next(e);
+    }
+});
+router.post(`/unfollow/:username`, auth, async (req, res, next) => {
+    try {
+        const token = await unfollowUser(req.token, req.params.username);
+        return res.json({ token: token });
     }
     catch (e) {
         next(e);
