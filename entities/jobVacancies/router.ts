@@ -8,7 +8,6 @@ import {
   removeVacancie,
 } from "./controller.js";
 import { allVacancieInfo, auth, itsCompany, itsUser } from "../../core/mdw.js";
-// import { auth } from '../../core/mdw.js';
 
 const router = express.Router();
 
