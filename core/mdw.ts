@@ -26,12 +26,12 @@ export const sameUser = (req, res, next) => {
 
 export const checkNoInfoEmpty = (req, res, next) => {
   const keys = Object.keys(req.body);
-  keys.forEach((key) => {
-    if (req.body[key] === "") {
+  let allInfoChecked = keys.filter((key) => req.body[key] === "")
+  if(allInfoChecked.length > 0) {
       throw new Error("INFO_LEFT");
-    }
-  });
+  } else {
   next();
+  }
 };
 
 export const itsUser = (req, res, next) => {
